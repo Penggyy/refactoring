@@ -30,16 +30,14 @@ public class StatementPrinter {
 
         for (Performance performance : invoice.getPerformances()) {
 
-            int rslt = getRskt(performance);
-
             // add volume credits
             volumeCredits += Math.max(performance.getAudience() - Constants.BASE_VOLUME_CREDIT_THRESHOLD, 0);
             // add extra credit for every five comedy attendees
             if ("comedy".equals(getPlay(performance).getType())) volumeCredits += performance.getAudience() / Constants.COMEDY_EXTRA_VOLUME_FACTOR;
 
             // print line for this order
-            result.append(String.format("  %s: %s (%s seats)%n", getPlay(performance).getName(), format.format(rslt / 100), performance.getAudience()));
-            totalAmount += rslt;
+            result.append(String.format("  %s: %s (%s seats)%n", getPlay(performance).getName(), format.format(getRslt(performance) / 100), performance.getAudience()));
+            totalAmount += getRslt(performance);
         }
         result.append(String.format("Amount owed is %s%n", format.format(totalAmount / 100)));
         result.append(String.format("You earned %s credits%n", volumeCredits));
@@ -50,7 +48,7 @@ public class StatementPrinter {
         return plays.get(performance.getPlayID());
     }
 
-    private int getRskt(Performance performance) {
+    private int getRslt(Performance performance) {
         int rslt = 0;
         switch (getPlay(performance).getType()) {
             case "tragedy":
