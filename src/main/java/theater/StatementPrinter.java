@@ -22,13 +22,18 @@ public class StatementPrinter {
      * @throws RuntimeException if one of the play types is not known
      */
     public String statement() {
-        int volumeCredits = getTotalVolumeCredits();
-        final StringBuilder result = new StringBuilder("Statement for " + invoice.getCustomer() + System.lineSeparator());
+        final int volumeCredits = getTotalVolumeCredits();
+        final StringBuilder result = new StringBuilder("Statement for "
+                + invoice.getCustomer()
+                + System.lineSeparator());
         for (Performance performance : invoice.getPerformances()) {
             // print line for this order
-            result.append(String.format("  %s: %s (%s seats)%n", getPlay(performance).getName(), usd(getAmount(performance)), performance.getAudience()));
+            result.append(String.format("  %s: %s (%s seats)%n",
+                    getPlay(performance).getName(),
+                    usd(getAmount(performance)),
+                    performance.getAudience()));
         }
-        int totalAmount = getTotalAmount();
+        final int totalAmount = getTotalAmount();
         result.append(String.format("Amount owed is %s%n", usd(totalAmount)));
         result.append(String.format("You earned %s credits%n", volumeCredits));
         return result.toString();
@@ -57,9 +62,12 @@ public class StatementPrinter {
     private int getVolumeCredits(Performance performance) {
         // add volume credits
         int result = 0;
-        result += Math.max(performance.getAudience() - Constants.BASE_VOLUME_CREDIT_THRESHOLD, 0);
+        result += Math.max(performance.getAudience()
+                - Constants.BASE_VOLUME_CREDIT_THRESHOLD, 0);
         // add extra credit for every five comedy attendees
-        if ("comedy".equals(getPlay(performance).getType())) result += performance.getAudience() / Constants.COMEDY_EXTRA_VOLUME_FACTOR;
+        if ("comedy".equals(getPlay(performance).getType())) {
+            result += performance.getAudience() / Constants.COMEDY_EXTRA_VOLUME_FACTOR;
+        }
         return result;
     }
 
